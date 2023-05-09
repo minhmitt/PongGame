@@ -1,0 +1,6 @@
+﻿  main.cpp
+C:\Users\dnm77\source\repos\SFMLCourse\SFMLCourse\main.cpp(170,21): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\dnm77\source\repos\SFMLCourse\SFMLCourse\main.cpp(194,21): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\dnm77\source\repos\SFMLCourse\SFMLCourse\main.cpp(197,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\dnm77\source\repos\SFMLCourse\SFMLCourse\main.cpp(197,18): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  SFMLCourse.vcxproj -> C:\Users\dnm77\source\repos\SFMLCourse\x64\Debug\SFMLCourse.exe
