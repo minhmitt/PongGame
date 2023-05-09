@@ -183,12 +183,12 @@ int main() {
 		//Pad2 (AI)
 		if (ballShape.getPosition().y < pad2Shape.getPosition().y)
 		{
-			yVelocityPad2 = -1;
+			yVelocityPad2 = -3;
 		}
 
 		if (ballShape.getPosition().y > pad2Shape.getPosition().y)
 		{
-			yVelocityPad2 = 1;
+			yVelocityPad2 = 3;
 		}
 
 		pad2Shape.move(0, yVelocityPad2);
