@@ -206,14 +206,14 @@ int main() {
 		{
 			++player2Score;
 			ballShape.setPosition(370, 250);
-			yVelocityBall = 3;
+			yVelocityBall = 3; // ball for player 1
 		}
 
 		if (ballShape.getPosition().x > 800)
 		{
 			++player1Score;
 			ballShape.setPosition(370, 250);
-			xVelocityBall = 3;
+			xVelocityBall = 3; // ball for player 2
 		}
 
 		//Collision for pad1
