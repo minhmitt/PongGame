@@ -14,7 +14,7 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Game");
 
 	//Fps limit
-	window.setFramerateLimit(80);
+	window.setFramerateLimit(120);
 
 	window.setKeyRepeatEnabled(false);
 
@@ -30,12 +30,27 @@ int main() {
 		return 1;
 	}
 
+	//Scoreboard
 	sf::Text score;
 	score.setFont(font);
 	score.setCharacterSize(30);
 	score.setFillColor(sf::Color::Green);
 	score.setPosition(380, 10);
 	score.setString("0 : 0");
+
+	sf::Text readyToPlay;
+	readyToPlay.setFont(font);
+	readyToPlay.setPosition(240, 230);
+	readyToPlay.setCharacterSize(38);
+	readyToPlay.setFillColor(sf::Color::Green);
+	readyToPlay.setString("Press space to play");
+
+	sf::Text restartGame;
+	restartGame.setFont(font);
+	restartGame.setPosition(0, 0);
+	restartGame.setCharacterSize(25);
+	restartGame.setFillColor(sf::Color::Green);
+	restartGame.setString("Esc to play again");
 
 	//Images
 	sf::Texture background;
@@ -116,13 +131,16 @@ int main() {
 
 	//Ball
 	sf::CircleShape ballShape;
-	ballShape.setRadius(30);
+	ballShape.setRadius(25);
 	ballShape.setPosition(370, 250);
 	ballShape.setTexture(&ball);
 	ballShape.setOutlineColor(sf::Color::Green);
 
+	//Game state
+	bool isPlaying = false;
+
 	//Game loop
-	while (play == true) 
+	while (play == true)
 	{
 		//EVENTS
 		while (window.pollEvent(event))
@@ -133,116 +151,134 @@ int main() {
 				play = false;
 			}
 		}
+
+		//Press space to play
+		if (isPlaying == false && sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+			isPlaying = true;
+		}
+
+		//Press Esc to restart game
+		if (isPlaying == true && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+			isPlaying = false;
+		}
 		
-		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Up) {
-			up = true;
-		}
+		if (isPlaying) {
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Up) {
+				up = true;
+			}
 
-		if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Up) {
-			up = false;
-		}
+			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Up) {
+				up = false;
+			}
 
-		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down) {
-			down = true;
-		}
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down) {
+				down = true;
+			}
 
-		if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Down) {
-			down = false;
-		}
+			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Down) {
+				down = false;
+			}
 
-		//LOGIC
-		if (up == true) {
-			yVelocityPad1 = -5;
-		}
+			//LOGIC
+			if (up == true) {
+				yVelocityPad1 = -4;
+			}
 
-		if (down == true) {
-			yVelocityPad1 = 5;
-		}
+			if (down == true) {
+				yVelocityPad1 = 4;
+			}
 
-		if (up == true && down == true) {
-			yVelocityPad1 = 0;
-		}
+			if (up == true && down == true) {
+				yVelocityPad1 = 0;
+			}
 
-		if (up == false && down == false) {
-			yVelocityPad1 = 0;
-		}
+			if (up == false && down == false) {
+				yVelocityPad1 = 0;
+			}
 
-		pad1Shape.move(0, yVelocityPad1);
-		
-		//Out of bounds check
-		if (pad1Shape.getPosition().y < 0)
-		{
-			pad1Shape.setPosition(50, 0);
-		}
+			pad1Shape.move(0, yVelocityPad1);
 
-		if (pad1Shape.getPosition().y > 450)
-		{
-			pad1Shape.setPosition(50, 450);
-		}
+			//Out of bounds check
+			if (pad1Shape.getPosition().y < 0)
+			{
+				pad1Shape.setPosition(50, 0);
+			}
 
-		//Pad2 (AI)
-		if (ballShape.getPosition().y < pad2Shape.getPosition().y)
-		{
-			yVelocityPad2 = -3;
-		}
+			if (pad1Shape.getPosition().y > 450)
+			{
+				pad1Shape.setPosition(50, 450);
+			}
 
-		if (ballShape.getPosition().y > pad2Shape.getPosition().y)
-		{
-			yVelocityPad2 = 3;
-		}
+			//Pad2 (AI)
+			if (ballShape.getPosition().y < pad2Shape.getPosition().y)
+			{
+				yVelocityPad2 = -5;
+			}
 
-		pad2Shape.move(0, yVelocityPad2);
+			if (ballShape.getPosition().y > pad2Shape.getPosition().y)
+			{
+				yVelocityPad2 = 5;
+			}
 
-		//Ball
-		ballShape.move(xVelocityBall, yVelocityBall);
-			
-		//Out of bounds check for ball
-		if (ballShape.getPosition().y < 0 || ballShape.getPosition().y > 450)
-		{
-			yVelocityBall = -yVelocityBall;
-		}
+			pad2Shape.move(0, yVelocityPad2);
 
-		if (ballShape.getPosition().x < 50)
-		{
-			++player2Score;
-			ballShape.setPosition(370, 250);
-			yVelocityBall = 3; // ball for player 1
-		}
+			//Ball
+			ballShape.move(xVelocityBall, yVelocityBall);
 
-		if (ballShape.getPosition().x > 800)
-		{
-			++player1Score;
-			ballShape.setPosition(370, 250);
-			xVelocityBall = 3; // ball for player 2
-		}
+			//Out of bounds check for ball
+			if (ballShape.getPosition().y < 0 || ballShape.getPosition().y > 450)
+			{
+				yVelocityBall = -yVelocityBall;
+			}
 
-		//Collision for pad1
-		if (ballShape.getGlobalBounds().intersects(pad1Shape.getGlobalBounds()) == true)
-		{
-			xVelocityBall = -xVelocityBall;
-			hit.play();
-		}
+			if (ballShape.getPosition().x < 50)
+			{
+				++player2Score;
+				ballShape.setPosition(370, 250);
+				xVelocityBall = 3; //ball for player 2
+			}
 
-		//Collision for pad2
-		if (ballShape.getGlobalBounds().intersects(pad2Shape.getGlobalBounds()) == true)
-		{
-			xVelocityBall = -xVelocityBall;
-			hit.play();
+			if (ballShape.getPosition().x > 800)
+			{
+				++player1Score;
+				ballShape.setPosition(370, 250);
+				yVelocityBall = 3;
+				xVelocityBall = -xVelocityBall;// ball for player 1
+			}
+
+			//Collision for pad1
+			if (ballShape.getGlobalBounds().intersects(pad1Shape.getGlobalBounds()) == true)
+			{
+				xVelocityBall = -xVelocityBall;
+				hit.play();
+			}
+
+			//Collision for pad2
+			if (ballShape.getGlobalBounds().intersects(pad2Shape.getGlobalBounds()) == true)
+			{
+				xVelocityBall = -xVelocityBall;
+				hit.play();
+			}
 		}
 
 		//RENDERING
 		window.clear();
 
 		window.draw(backgroundShape);
-		window.draw(pad1Shape);
-		window.draw(pad2Shape);
-		window.draw(ballShape);
-
-		//Score
-		std::stringstream text;
-		text << player1Score << " : " << player2Score;
-		score.setString(text.str());
-		window.draw(score);
+		if (isPlaying) {
+			window.draw(pad1Shape);
+			window.draw(pad2Shape);
+			window.draw(ballShape);
+			//Score
+			std::stringstream text;
+			text << player1Score << " : " << player2Score;
+			score.setString(text.str());
+			window.draw(score);
+			window.draw(restartGame);
+		}
+		else {
+			window.draw(readyToPlay);
+		}
 
 		window.display();
 	}
